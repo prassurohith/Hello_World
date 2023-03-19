@@ -31,6 +31,20 @@ stages {
               echo '<--------------- Build & Compile Source Code Completed --------------->'
               }
                                          }
+//3. In this Stage job will Analysis will above compiled code with SonarQube.
+// for this stage we used withSonarQubeEnv plugin to generate declarative pipeline syntax.
+
+stage('SonarQube Analysis'){
+     steps{
+           echo '<--------------- Static Code Analysis with SonarQube --------------->'
+           script{
+			      withSonarQubeEnv(credentialsId: 'SonarQube-Jenkins')  {
+                  sh 'mvn clean package  sonar:sonar'
+                 }
+				                                                            }
+                echo '<--------------- Static Code Analysis with SonarQube Completed--------------->'
+                }
+                          }
 }
 
 }
