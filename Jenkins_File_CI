@@ -15,7 +15,7 @@ stages {
          steps {
               echo '<--------------- Getting Code From GitHub--------------->'
 
-           	  git branch: 'main', credentialsId: '57c0ce68-28eb-4a5b-8ea5-bdabab415bb8', url: 'https://github.com/prassurohith/Hello_World.git'
+           	  git branch: 'prod', credentialsId: '57c0ce68-28eb-4a5b-8ea5-bdabab415bb8', url: 'https://github.com/prassurohith/Hello_World.git'
 
               echo '<------------- Getting Code From GitHub completed --------------->'
                }
@@ -45,7 +45,36 @@ stage('SonarQube Analysis'){
                 echo '<--------------- Static Code Analysis with SonarQube Completed--------------->'
                 }
                           }
+						  
+//4. In this Stage  Job needs to pass the quality checks using SonarQube.
+//   Here we use waitForQualityGate plugin to generate declarative pipeline syntax.
+
+stage('Sonar Quality Gate '){
+            steps{
+                echo '<--------------- Quality Gate Analysis with SonarQube --------------->'
+                 script{
+			     "waitForQualityGate abortPipeline: false, credentialsId: 'SonarQube-Jenkins'"
+                       }
+
+                echo '<--------------- Quality Gate Analysis with SonarQube Completed--------------->'
+                  }
+                           }
+//5. In this Stage Above Created Final Artifact will be uploaded to Nexus Artifactory Based on releases or Snapshots.
+//   Here we used nexus nexusArtifactUploader plugin to generate declarative pipeline syntax.
+
+stage('Upload Artifact to Artifact Repository'){
+    steps{
+      echo '<---------------Upload Artifact to Artifact Repository Started --------------->'
+      script{
+
+            nexusArtifactUploader artifacts: [[artifactId: 'hello-world', classifier: '', file: 'webapp/target/hello-world.war', type: 'war']], credentialsId: 'Nexus_Artifactory', groupId: 'com.example.maven-project', nexusUrl: '192.168.1.5:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'My_DevOps_Hosted_Release_Repository', version: '1.0'
+            }
+
+      echo '<--------------- Upload Artifact to Artifact Repository  Completed--------------->'
+        }
+                                                }
 }
 
 }
+
 
