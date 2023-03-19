@@ -102,7 +102,7 @@ stage('Push Docker Image To Docker Hub'){
 		         sh 'docker image push  prassurohith9999/$JOB_NAME:latest'
 				 sh 'docker rmi  docker rmi -f $(docker images -aq)'
           }
-                echo '<---------------Push Docker Image To Docker Hub  Completed--------------->'
+    echo '<---------------Push Docker Image To Docker Hub  Completed--------------->'
 
           }
                                        }						   
