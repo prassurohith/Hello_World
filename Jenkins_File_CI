@@ -66,13 +66,15 @@ stage('Upload Artifact to Artifact Repository'){
     steps{
       echo '<---------------Upload Artifact to Artifact Repository Started --------------->'
       script{
-
-            nexusArtifactUploader artifacts: [[artifactId: 'hello-world', classifier: '', file: 'webapp/target/hello-world.war', type: 'war']], credentialsId: 'Nexus_Artifactory', groupId: 'com.example.maven-project', nexusUrl: '192.168.1.5:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'My_DevOps_Hosted_Release_Repository', version: '1.0'
+            def mavenPom = readMavenPom file: 'pom.xml'
+			def nexusRepoName = mavenPom.version.endsWith("SNAPSHOT") ? "My_DevOps_Hosted_Snapshots_Repository"  :  "My_DevOps_Hosted_Release_Repository"
+            nexusArtifactUploader artifacts: [[artifactId: 'hello-world', classifier: '', file: 'webapp/target/hello-world${mavenPom.version}.war', type: 'war']], credentialsId: 'Nexus_Artifactory', groupId: 'com.example.maven-project', nexusUrl: '192.168.1.5:8081', nexusVersion: 'nexus3', protocol: 'http', repository: 'My_DevOps_Hosted_Release_Repository', version: '${mavenPom.version}'
             }
 
       echo '<--------------- Upload Artifact to Artifact Repository  Completed--------------->'
         }
                                                 }
+												
 //6. In this Stage Job will Build  a Docker Image.
 //   We use Multiple Shell Commands.
 
