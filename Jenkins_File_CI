@@ -15,7 +15,7 @@ stages {
          steps {
               echo '<--------------- Getting Code From GitHub--------------->'
 
-           	  git branch: 'main', credentialsId: '57c0ce68-28eb-4a5b-8ea5-bdabab415bb8', url: 'https://github.com/prassurohith/Hello_World.git'
+           	  git branch: 'prod', credentialsId: '57c0ce68-28eb-4a5b-8ea5-bdabab415bb8', url: 'https://github.com/prassurohith/Hello_World.git'
 
               echo '<------------- Getting Code From GitHub completed --------------->'
                }
