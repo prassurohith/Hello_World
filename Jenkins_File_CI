@@ -1,1 +1,36 @@
+pipeline{
+agent {
+       node {
+         label "MAVEN"
+            }
+      }
+environment{
+        PATH = "$PATH:/opt/mvn/apache-maven"
+           }
+stages {
 
+//1.In this Stage job Will Import  Source Code from GitHub repository.
+
+    stage('Get Code From GitHub') {
+         steps {
+              echo '<--------------- Getting Code From GitHub--------------->'
+
+           	  git branch: 'main', credentialsId: '57c0ce68-28eb-4a5b-8ea5-bdabab415bb8', url: 'https://github.com/prassurohith/Hello_World.git'
+
+              echo '<------------- Getting Code From GitHub completed --------------->'
+               }
+                                  }
+//2. In this Stage  Build & Compile  the  Above imported Source code.
+
+    stage('Build & Compile Source Code') {
+         steps {
+              echo '<--------------- Build & Compile Source Code --------------->'
+
+              sh  'mvn clean install'
+
+              echo '<--------------- Build & Compile Source Code Completed --------------->'
+              }
+                                         }
+}
+
+}
